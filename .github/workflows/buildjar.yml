@@ -1,0 +1,30 @@
+name: Build JAR
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'    # или '8' если нужен Java 8
+          distribution: 'temurin'
+
+      - name: Grant execute permission for Gradle wrapper
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: oculus-jar
+          path: build/libs/*.jar
